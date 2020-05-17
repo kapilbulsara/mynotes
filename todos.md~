@@ -1,0 +1,28 @@
+# mynotes 
+
+## features
+
+- [ ] commands
+	- [ ] add 
+		- [ ] notebook - mkdir folder
+			- [ ] in the current folder as subnote
+		- [ ] notes - for file
+			- [ ] args
+				- [ ] title 
+		- [ ] journal-post - new journal post with time stamp and title 
+			- [ ] args 
+				- [ ] title - title of journal with default time stap 
+			- [ ] setup the journal post
+				- [ ] create file
+					- [ ] with title and time stamp
+					- [ ] convert small letters 
+					- [ ] replace spaces with dashes
+				- [ ] place  # title in the top 
+				- [ ] add date 
+				- [ ] add link to previous post 
+				- [ ] add link  to this post in previous post 
+		- [ ] meeting - add meeting notes in designated folder
+			- [ ] special features
+				- adds title and date in the in the file name and in file 
+			- [ ] minutes
+			- [ ] agenda 

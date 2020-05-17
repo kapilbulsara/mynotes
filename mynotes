@@ -1,0 +1,38 @@
+#! /bin/sh
+
+display_error (){
+
+        exit
+}
+
+NOTES_ROOT=~/Nextcloud/Documents/notes
+JOURNAL_ROOT=~/Nextcloud/Documents/personal/journal
+DEFAULT_NOTEBOOK=todo
+EXTENSION='.md'
+TIMESTAMP="$(date +%Y%m%d-%H:%M:%S)"
+TIMESTAMP_FILE="$(date +%Y%m%d_%H%M%S)"
+
+
+if [ $# = 0 ]; then 
+	cd $NOTES_ROOT
+	vim . 
+elif [ $# = 1 -a $1 = 'journal' ]; then
+	cd $JOURNAL_ROOT
+	vim -S journal.vim . 
+	#echo 'just open here'
+elif [ $# = 3 -a $1 = 'add' ]; then
+	if [ $2 = 'notebook' ]; then 
+		mkdir $3
+		#echo 'notebook'
+	elif [ $2 = 'note' ]; then 
+		vim "$3$EXTENSION"
+		#echo 'note'
+	elif [ $2 = 'journal' ]; then 
+		#underscores are better than dashes
+		cd $JOURNAL_ROOT
+		FILENAME="$JOURNAL_ROOT/$TIMESTAMP_FILE"_"$3$EXTENSION"
+		vim -S journal.vim $FILENAME
+		#echo 'journal post'
+	fi 
+
+fi
