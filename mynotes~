@@ -7,7 +7,7 @@ display_error (){
 
 NOTES_ROOT=~/Nextcloud/Documents/notes
 JOURNAL_ROOT=~/Nextcloud/Documents/personal/journal
-DEFAULT_NOTEBOOK=todo
+DEFAULT_NOTEBOOK=todos
 EXTENSION='.md'
 TIMESTAMP="$(date +%Y%m%d-%H:%M:%S)"
 TIMESTAMP_FILE="$(date +%Y%m%d_%H%M%S)"
@@ -15,17 +15,21 @@ TIMESTAMP_FILE="$(date +%Y%m%d_%H%M%S)"
 
 if [ $# = 0 ]; then 
 	cd $NOTES_ROOT
-	vim . 
-elif [ $# = 1 -a $1 = 'journal' ]; then
-	cd $JOURNAL_ROOT
-	vim . 
-	#echo 'just open here'
+	vim -S '.mynotes.vim' . 
+elif [ $# = 1 ]; then
+	if [ $1 = 'journal' ]; then  
+		cd $JOURNAL_ROOT
+		vim -S ".journal.vim" . 
+	elif [ $1 = 'jot' ]; then  
+		cd $NOTES_ROOT
+		vim -S '.mynotes.vim' "$DEFAULT_NOTEBOOK/jot.md"
+	fi
 elif [ $# = 3 -a $1 = 'add' ]; then
 	if [ $2 = 'notebook' ]; then 
 		mkdir $3
 		#echo 'notebook'
 	elif [ $2 = 'note' ]; then 
-		vim "$3$EXTENSION"
+		vim  -S '.mynotes.vim' "$3$EXTENSION"
 		#echo 'note'
 	elif [ $2 = 'journal' ]; then 
 		#underscores are better than dashes
