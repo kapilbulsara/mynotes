@@ -5,17 +5,14 @@ display_error (){
         exit
 }
 
-NOTES_ROOT=~/Nextcloud/Documents/notes
-JOURNAL_ROOT=~/Nextcloud/Documents/personal/journal
-DEFAULT_NOTEBOOK=todos
-EXTENSION='.md'
-TIMESTAMP="$(date +%Y%m%d-%H:%M:%S)"
-TIMESTAMP_FILE="$(date +%Y%m%d_%H%M%S)"
+. ~/.config/mynotes/mynotes.conf
 
+echo 'this are configs'
+echo  "$NOTES_ROOT"
 
 if [ $# = 0 ]; then 
-	cd $NOTES_ROOT
-	vim -S '.mynotes.vim' . 
+	#	cd $NOTES_ROOT
+	vim $NOTES_ROOT	 
 elif [ $# = 1 ]; then
 	if [ $1 = 'journal' ]; then  
 		cd $JOURNAL_ROOT
@@ -24,18 +21,40 @@ elif [ $# = 1 ]; then
 		cd $NOTES_ROOT
 		vim -S '.mynotes.vim' "$DEFAULT_NOTEBOOK/jot.md"
 	fi
+elif [ $# = 2 ]; then
+	if [ $1 = 'open' ] 
+	then 
+		cd "$NOTES_ROOT"
+		vim -S "$NOTES_ROOT/.mynotes.vim" "$NOTES_ROOT/$2" 
+	fi
 elif [ $# = 3 -a $1 = 'add' ]; then
 	if [ $2 = 'notebook' ]; then 
 		mkdir $3
 		#echo 'notebook'
 	elif [ $2 = 'note' ]; then 
-		vim  -S '.mynotes.vim' "$3$EXTENSION"
+		FILENAME=`echo $3 | tr -d '[:cntrl:][:punct:]' | tr -s '[:space:]' | tr '[:blank:]' '_' | tr '[:upper:]' '[:lower:]' `
+		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
+		FILENAME="$FILENAME$EXTENSION"
+		echo "# $TITLE" > $FILENAME
+		echo "" >> $FILENAME
+		echo "Time: $TIMESTAMP" >> $FILENAME
+		echo "" >> $FILENAME
+		vim  -S "$NOTES_ROOT/.mynotes.vim"  +$ "$FILENAME"
 		#echo 'note'
 	elif [ $2 = 'journal' ]; then 
 		#underscores are better than dashes
 		cd $JOURNAL_ROOT
-		FILENAME="$JOURNAL_ROOT/$TIMESTAMP_FILE"_"$3$EXTENSION"
-		vim -S '.journal.vim' $FILENAME
+		#TITLE=`echo $3 | sed -e "s/ +/_/g" | sed -e "s/[]
+		FILENAME=`echo $3 | tr -d '[:cntrl:][:punct:]' | tr -s '[:space:]' | tr '[:blank:]' '_' | tr '[:upper:]' '[:lower:]' `
+		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
+		#echo "$FILENAME"
+		#echo "$TITLE"
+		FILENAME="$JOURNAL_ROOT/$TIMESTAMP_FILE"_"$FILENAME$EXTENSION"
+		echo "# $TITLE" > $FILENAME
+		echo "" >> $FILENAME
+		echo "Time: $TIMESTAMP" >> $FILENAME
+		echo "" >> $FILENAME
+		vim -S '.journal.vim' +$ $FILENAME
 		#echo 'journal post'
 	fi 
 
