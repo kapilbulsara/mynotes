@@ -18,7 +18,6 @@ You can install mynotes and config files manually
 2. The default location of notes is ~/mynotes .If you chose to keep your notes in another location, please make the changes to the "NOTES_ROOT" variable in the config file. 
 3. cp the config file to ~/.config/mynotes/config
  
-
 ## usage 
 
 `mynotes [open|add] [notebook|note|journal] [notebook_name|note_title|journal_entry_title]`

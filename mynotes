@@ -7,9 +7,6 @@ display_error (){
 
 . ~/.config/mynotes/mynotes.conf
 
-echo 'this are configs'
-echo  "$NOTES_ROOT"
-
 if [ $# = 0 ]; then 
 	#	cd $NOTES_ROOT
 	vim $NOTES_ROOT	 
