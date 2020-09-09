@@ -13,36 +13,35 @@ if [ $# = 0 ]; then
 elif [ $# = 1 ]; then
 	if [ $1 = 'journal' ]; then  
 		cd $JOURNAL_ROOT
-		vim -S ".journal.vim" . 
+		vim -S "$CONFIG_DIR/vim/notes.vim" . 
 	elif [ $1 = 'jot' ]; then  
 		cd $NOTES_ROOT
-		vim -S '.mynotes.vim' "$DEFAULT_NOTEBOOK/jot.md"
+		vim -S "$CONFIG_DIR/vim/notes.vim" "$DEFAULT_NOTEBOOK/jot.md"
 	fi
 elif [ $# = 2 ]; then
 	if [ $1 = 'open' ] 
 	then 
 		cd "$NOTES_ROOT"
-		vim -S "$NOTES_ROOT/.mynotes.vim" "$NOTES_ROOT/$2" 
+		vim -S "$CONFIG_DIR/vim/notes.vim" "$NOTES_ROOT/$2" 
 	fi
 elif [ $# = 3 -a $1 = 'add' ]; then
 	if [ $2 = 'notebook' ]; then 
-		mkdir $3
+		mkdir -p $3
 		#echo 'notebook'
 	elif [ $2 = 'note' ]; then 
-		FILENAME=`echo $3 | tr -d '[:cntrl:][:punct:]' | tr -s '[:space:]' | tr '[:blank:]' '_' | tr '[:upper:]' '[:lower:]' `
 		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
+		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-/]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
 		FILENAME="$FILENAME$EXTENSION"
+		cd $NOTES_ROOT
 		echo "# $TITLE" > $FILENAME
 		echo "" >> $FILENAME
 		echo "Time: $TIMESTAMP" >> $FILENAME
 		echo "" >> $FILENAME
-		vim  -S "$NOTES_ROOT/.mynotes.vim"  +$ "$FILENAME"
-		#echo 'note'
+		vim  -S "$CONFIG_DIR/vim/notes.vim"  +$ "$FILENAME"
 	elif [ $2 = 'journal' ]; then 
 		#underscores are better than dashes
 		cd $JOURNAL_ROOT
-		#TITLE=`echo $3 | sed -e "s/ +/_/g" | sed -e "s/[]
-		FILENAME=`echo $3 | tr -d '[:cntrl:][:punct:]' | tr -s '[:space:]' | tr '[:blank:]' '_' | tr '[:upper:]' '[:lower:]' `
+		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-/]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
 		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
 		#echo "$FILENAME"
 		#echo "$TITLE"
@@ -51,8 +50,7 @@ elif [ $# = 3 -a $1 = 'add' ]; then
 		echo "" >> $FILENAME
 		echo "Time: $TIMESTAMP" >> $FILENAME
 		echo "" >> $FILENAME
-		vim -S '.journal.vim' +$ $FILENAME
-		#echo 'journal post'
+		vim -S "$CONFIG_DIR/vim/journal.vim" +$ $FILENAME
 	fi 
 
 fi

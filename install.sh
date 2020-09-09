@@ -1,7 +1,7 @@
 #! /bin/sh
 
-rm /user/local/bin/mynotes
-cp mynotes /user/local/bin/mynotes
+#rm /usr/local/bin/mynotes
+cp mynotes /usr/local/bin/mynotes
 . ./config/mynotes.conf
 
 mkdir -p $NOTES_ROOT
