@@ -8,8 +8,8 @@ display_error (){
 . ~/.config/mynotes/mynotes.conf
 
 if [ $# = 0 ]; then 
-	#	cd $NOTES_ROOT
-	vim $NOTES_ROOT	 
+	cd $NOTES_ROOT
+	vim -S "$CONFIG_DIR/vim/notes.vim" . 
 elif [ $# = 1 ]; then
 	if [ $1 = 'journal' ]; then  
 		cd $JOURNAL_ROOT
