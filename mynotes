@@ -13,7 +13,7 @@ if [ $# = 0 ]; then
 elif [ $# = 1 ]; then
 	if [ $1 = 'journal' ]; then  
 		cd $JOURNAL_ROOT
-		vim -S "$CONFIG_DIR/vim/notes.vim" . 
+		vim -S "$CONFIG_DIR/vim/journal.vim" . 
 	elif [ $1 = 'jot' ]; then  
 		cd $NOTES_ROOT
 		vim -S "$CONFIG_DIR/vim/notes.vim" "$DEFAULT_NOTEBOOK/jot.md"
