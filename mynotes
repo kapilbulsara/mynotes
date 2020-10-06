@@ -30,7 +30,7 @@ elif [ $# = 3 -a $1 = 'add' ]; then
 		#echo 'notebook'
 	elif [ $2 = 'note' ]; then 
 		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
-		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-/]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
+		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
 		FILENAME="$FILENAME$EXTENSION"
 		cd $NOTES_ROOT
 		echo "# $TITLE" > $FILENAME
@@ -41,7 +41,7 @@ elif [ $# = 3 -a $1 = 'add' ]; then
 	elif [ $2 = 'journal' ]; then 
 		#underscores are better than dashes
 		cd $JOURNAL_ROOT
-		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-/]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
+		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
 		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
 		#echo "$FILENAME"
 		#echo "$TITLE"
