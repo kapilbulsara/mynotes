@@ -1,9 +1,5 @@
 #! /bin/sh
 
-#rm /usr/local/bin/mynotes
-cp mynotes /usr/local/bin/mynotes
-USER=`who | awk '{print $1}'`
-#su  $USER 	
 . ./config/mynotes.conf
 #echo $NOTES_ROOT
 mkdir -p $NOTES_ROOT

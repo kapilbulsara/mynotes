@@ -5,18 +5,15 @@ mynotes is a simple note taking and journaling script for linux that uses vim an
 
 ## installation 
 
-### Automate
-It is recommended that you use the installation script provided.
-
 `sh ./install.sh`
 
-### Manual Installation
+### add mynotes to $PATH 
 
-You can install mynotes and config files manually 
+To access mynotes from where, you can copy the script to a location in your $PATH. 
 
-1. Place the "mynotes" script in one of the locations in $PATH. My recommendation is /usr/local/bin/mynote. 
-2. The default location of notes is ~/mynotes .If you chose to keep your notes in another location, please make the changes to the "NOTES_ROOT" variable in the config file. 
-3. cp the config file to ~/.config/mynotes/config
+It is recommended that you execute the following command: 
+
+`cp mynotes /usr/local/bin/mynotes`
  
 ## usage 
 
