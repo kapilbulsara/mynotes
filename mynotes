@@ -1,39 +1,79 @@
 #! /bin/sh
 
-display_error (){
+. ~/.config/mynotes/mynotes.conf
 
-        exit
+display_message (){
+	if [ "$1" = 'howto' ]; then 
+		echo "mynotes [open|add|jot] [notebook|note|journal] '[title|filename]'"
+	elif [ "$1" = 'usage' ]; then 
+		display_message "Invalid usage"
+	else
+		echo $1
+	fi
 }
 
-. ~/.config/mynotes/mynotes.conf
+set_path(){
+
+	if [ "$1" = 'note' ]; then
+		FILENAME=`echo "$2" | sed  's|[[:space:]]|_|g;s|-|_|g;s|[^[:alnum:]/_-]||g;s|_\+|_|g' | tr '[:upper:]' '[:lower:]'`
+		echo "$NOTES_ROOT/$FILENAME$EXTENSION"
+	elif [ "$1" = 'notebook' ]; then
+		FILENAME=`echo "$2" | sed  's|[[:space:]]|_|g;s|-|_|g;s|[^[:alnum:]/_-]||g;s|_\+|_|g' | tr '[:upper:]' '[:lower:]'`
+		echo "$NOTES_ROOT/$FILENAME"
+	elif [ "$1" = 'journal' ]; then 
+		FILENAME=`echo "$2" | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
+		echo "$JOURNAL_ROOT/$TIMESTAMP_FILE"_"$FILENAME$EXTENSION"
+	fi
+}
+
+set_title(){
+	echo `echo "$1" | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
+}
 
 if [ $# = 0 ]; then 
 	cd $NOTES_ROOT
 	vim -S "$CONFIG_DIR/vim/notes.vim" . 
 elif [ $# = 1 ]; then
-	if [ $1 = 'journal' ]; then  
-		cd $JOURNAL_ROOT
-		vim -S "$CONFIG_DIR/vim/journal.vim" . 
-	elif [ $1 = 'jot' ]; then  
+	if [ $1 = 'jot' ]; then  
 		cd $NOTES_ROOT
 		vim -S "$CONFIG_DIR/vim/notes.vim" "$DEFAULT_NOTEBOOK/jot.md"
+	else
+		display_message "usage"
+		display_message "howto"
 	fi
 elif [ $# = 2 ]; then
-	if [ $1 = 'open' ] 
-	then 
-		cd "$NOTES_ROOT"
-		vim -S "$CONFIG_DIR/vim/notes.vim" "$NOTES_ROOT/$2" 
+	if [ $1 = 'open' ] && [ $2 = 'journal' ]; then 
+		cd $JOURNAL_ROOT
+		vim -S "$CONFIG_DIR/vim/journal.vim" . 
+	else
+		display_message "usage"
+		display_message "howto"
 	fi
-elif [ $# = 3 -a $1 = 'add' ]; then
+elif [ $# = 3 ] && [ $1 = 'open' ]; then
+	if [ $2 = 'notebook'  ] || [ $2 = 'note' ]; then
+		LOCATION="$NOTES_ROOT/$3"
+		if [ -f $LOCATION ] || [ -d $LOCATION ]; then 
+			cd "$NOTES_ROOT"
+			vim -S "$CONFIG_DIR/vim/notes.vim" "$LOCATION" 
+		elif [ $2 = 'journal'  ]; then
+			display_message "note/notebook does not exist"
+			display_message "Please create one or check path"
+		fi
+	else
+		display_message "usage"
+		display_message "howto"
+	fi
+elif [ $# = 3 ] && [ $1 = 'add' ]; then
 	if [ $2 = 'notebook' ]; then 
-		mkdir -p "$NOTES_ROOT/$3"
-		#echo 'notebook'
+		DIRPATH=`set_path notebook $3`	
+		#what about nested notebooks
+		mkdir -p "$DIRPATH"
+		display_message "notebook created at $DIRPATH"
 	elif [ $2 = 'note' ]; then 
-		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
-		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
-		FILENAME="$FILENAME$EXTENSION"
-		cd $NOTES_ROOT
-		echo "# $TITLE" > $FILENAME
+		TITLE=`set_title "$3"`
+		FILENAME=`set_path note "$3"`
+		echo "$FILENAME"
+		echo "# $TITLE" > "$FILENAME"
 		echo "" >> $FILENAME
 		echo "Time: $TIMESTAMP" >> $FILENAME
 		echo "" >> $FILENAME
@@ -41,16 +81,19 @@ elif [ $# = 3 -a $1 = 'add' ]; then
 	elif [ $2 = 'journal' ]; then 
 		#underscores are better than dashes
 		cd $JOURNAL_ROOT
-		FILENAME=`echo $3 | sed  's/[[:space:]]/_/g;s/-/_/g;s/[^[:alnum:]_-]//g;s/_\+/_/g' | tr '[:upper:]' '[:lower:]'`
-		TITLE=`echo $3 | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
-		#echo "$FILENAME"
-		#echo "$TITLE"
-		FILENAME="$JOURNAL_ROOT/$TIMESTAMP_FILE"_"$FILENAME$EXTENSION"
+		FILENAME=`set_path journal "$3"`
+		TITLE=`set_title "$3"`
 		echo "# $TITLE" > $FILENAME
 		echo "" >> $FILENAME
 		echo "Time: $TIMESTAMP" >> $FILENAME
 		echo "" >> $FILENAME
 		vim -S "$CONFIG_DIR/vim/journal.vim" +$ $FILENAME
+	else
+		display_message " type. You can only add  note | journal | notebook"
 	fi 
-
+else
+	display_message "usage"	
+	display_message "howto"
 fi
+	
+	
