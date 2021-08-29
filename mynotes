@@ -1,8 +1,8 @@
-#! /bin/sh
+#! /bin/bash
 
 . ~/.config/mynotes/mynotes.conf
 
-display_message (){
+function display_message (){
 	if [ "$1" = 'howto' ]; then 
 		echo "mynotes [open|add|jot] [notebook|note|journal] '[title|filename]'"
 	elif [ "$1" = 'usage' ]; then 
@@ -12,7 +12,7 @@ display_message (){
 	fi
 }
 
-set_path(){
+function set_path(){
 
 	if [ "$1" = 'note' ]; then
 		FILENAME=`echo "$2" | sed  's|[[:space:]]|_|g;s|-|_|g;s|[^[:alnum:]/_-]||g;s|_\+|_|g' | tr '[:upper:]' '[:lower:]'`
@@ -26,12 +26,12 @@ set_path(){
 	fi
 }
 
-set_title(){
+function set_title(){
 	echo `echo "$1" | tr -s '[:space:]' | sed -e "s/\b\(.\)/\u\1/g"`
 }
 
 if [ $# = 0 ]; then 
-	cd $NOTES_ROOT
+	cd "$NOTES_ROOT"
 	vim -S "$CONFIG_DIR/vim/notes.vim" . 
 elif [ $# = 1 ]; then
 	if [ $1 = 'jot' ]; then  
@@ -45,9 +45,8 @@ elif [ $# = 2 ]; then
 	if [ $1 = 'open' ] && [ $2 = 'journal' ]; then 
 		cd $JOURNAL_ROOT
 		vim -S "$CONFIG_DIR/vim/journal.vim" . 
-	else
-		display_message "usage"
-		display_message "howto"
+	elif [ $1 = 'load' ]; then 
+		vim -S "$2"
 	fi
 elif [ $# = 3 ] && [ $1 = 'open' ]; then
 	if [ $2 = 'notebook'  ] || [ $2 = 'note' ]; then
