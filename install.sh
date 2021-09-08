@@ -14,6 +14,7 @@ CONFIG_DIR="$USER_HOME/.config/mynotes"
 CONFIG_FILE="$USER_HOME/.config/mynotes/mynotes.conf"
 
 cp mynotes /usr/local/bin/mynotes
+cp mynotes_autocomplete /etc/bash_completion.d/
 
 mkdir -p $NOTES_ROOT
 mkdir -p $CONFIG_DIR
@@ -36,4 +37,3 @@ chown -R $SUDO_USER:$SUDO_USER $NOTES_ROOT
 chown -R $SUDO_USER:$SUDO_USER $CONFIG_DIR
 chown -R $SUDO_USER:$SUDO_USER $JOURNAL_ROOT
 
-source autocomplete

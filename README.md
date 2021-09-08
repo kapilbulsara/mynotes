@@ -5,37 +5,38 @@ mynotes is a simple note taking and journaling script for linux that uses vim an
 
 ## installation 
 
-`sh ./install.sh`
+`sudo sh ./install.sh`
 
 ### add mynotes to $PATH 
 
-To access mynotes from where, you can copy the script to a location in your $PATH. 
+In some instances the install script will not be be able to add mynotes script to path. If this happens, run this command. 
 
-It is recommended that you execute the following command: 
-
-`cp mynotes /usr/local/bin/mynotes`
+`sudo cp mynotes /usr/local/bin/mynotes`
  
 ## usage 
 
-`mynotes [open|add] [notebook|note|journal] [notebook_name|note_title|journal_entry_title]`
+`mynotes [open|add|load] [notebook|note|journal] [notebook_name|note_title|journal_entry_title]`
 
 "add" option takes the 3rd argument and creates a markdown file with that name, removes non alphanumeric characters and replaces spaces with underscores. A heading is also added at the top of the file.
 if "add journal" is used, then timestamp is added to the beginning of the file name. 
 
 ### Examples
 
+TIP: as of v1.2 mynotes uses absolute paths. Using tab complete will autocomplete the path for you.
+
 - open mynotes in root folder
 `mynotes`
 
 - open todos
-`mynotes open todos`
+`mynotes open ~/Notes/todos`
 
 - open a file nest inside one or more folders
-`mynotes open todos/july/work.md`
-
-- add notebook articles
-`mynotes add articles`
+`mynotes open ~/Notes/todos/july/work.md`
 
 - add journal 
-`mynotes add journal "this is a new journal entry"
+`mynotes add journal "this is a new journal entry"`
 
+- load 
+will load a previous vim session saved with mksession command 
+
+`mynotes load ~/Notes/project/gardening`

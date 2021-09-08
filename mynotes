@@ -50,7 +50,7 @@ elif [ $# = 2 ]; then
 	fi
 elif [ $# = 3 ] && [ $1 = 'open' ]; then
 	if [ $2 = 'notebook'  ] || [ $2 = 'note' ]; then
-		LOCATION="$NOTES_ROOT/$3"
+		LOCATION="$3"
 		if [ -f $LOCATION ] || [ -d $LOCATION ]; then 
 			cd "$NOTES_ROOT"
 			vim -S "$CONFIG_DIR/vim/notes.vim" "$LOCATION" 
