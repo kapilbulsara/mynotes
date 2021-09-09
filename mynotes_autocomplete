@@ -3,14 +3,24 @@
 autocomplete()
 {
 	source ~/.config/mynotes/mynotes.conf
-#	local NOTES_ROOT CUR 
-#	NOTES_ROOT='~/Notes'
+	#	local NOTES_ROOT CUR 
+	#	NOTES_ROOT='~/Notes'
 
 	CUR="${COMP_WORDS[$COMP_CWORD]}"
 	if [ "${#COMP_WORDS[@]}" = "2" ]; then
 		COMPREPLY=($(compgen -W "add load open" "${COMP_WORDS[1]}"))
 	elif [ "${#COMP_WORDS[@]}" = "3" ]; then
-		COMPREPLY=($(compgen -W "note notebook journal" "${COMP_WORDS[2]}"))
+		if [  "${COMP_WORDS[$COMP_CWORD -1]}" = "open" ] || [  "${COMP_WORDS[$COMP_CWORD -1]}" = "add" ]; then
+			COMPREPLY=($(compgen -W "note notebook journal" "${COMP_WORDS[2]}"))
+		elif [  "${COMP_WORDS[$COMP_CWORD -1]}" = "load" ]; then
+			if [[ "$CUR" == "$NOTES_ROOT"* ]]; then 
+				compopt -o nospace -o plusdirs
+				COMPREPLY=($(compgen  -f -- "$CUR"  "${COMP_WORDS[2]}"))
+			else
+				compopt -o nospace -o dirnames
+				COMPREPLY=($(compgen -f -- "$NOTES_ROOT/$CUR"  "${COMP_WORDS[2]}"))
+			fi
+		fi
 	elif [ "${#COMP_WORDS[@]}" = "4" ]; then
 		if [  "${COMP_WORDS[$COMP_CWORD -1]}" = "notebook" ]; then
 			compopt -o nospace -o plusdirs 
